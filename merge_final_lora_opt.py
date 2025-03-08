@@ -17,13 +17,20 @@ def get_opt(model):
     # model = AutoModelForCausalLM.from_pretrained(model, torch_dtype=torch.float16)
     model.seqlen = model.config.max_position_embeddings
     return model
-# initial_model_path = "/groups/huanruiyang/dongweiw/GPTQ/llama-2-7b/llama-7b-hf/llama-7b"
-initial_model_path = "/groups/huanruiyang/dongweiw/GPTQ/OPT-1.3b"
 
-# initial_model_path = "/groups/huanruiyang/dongweiw/GPTQ/OPT-1.3b"
-# original_model = AutoModelForCausalLM.from_pretrained(initial_model_path, torch_dtype=torch.float16)
-original_model = get_opt(model=initial_model_path)
-# original_model.save_pretrained("/groups/huanruiyang/dongweiw/GPTQ/OPT-2.7b",safe_serialization=True)
-lora_model = PeftModel.from_pretrained(original_model, "/groups/huanruiyang/dongweiw/controllableQ/LORA_FT/finetuned/OPT-1.3B/epoch2lora_weights_only_sensitivity25.0")
-pretrained = lora_model.merge_and_unload()
-pretrained.save_pretrained("/groups/huanruiyang/dongweiw/controllableQ/LORA_FT/finetuned/OPT-1.3B/final_model")
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("model", type=str, help="opt model to load")
+    parser.add_argument("--lora_weights", type=str, help="lora weights to load")
+
+    parser.add_argument("--final_model", type=str, help="final model path")
+
+    args = parser.parse_args()
+
+    original_model = get_opt(model=args.model)
+    lora_model = PeftModel.from_pretrained(original_model, args.lora_weights)
+    pretrained = lora_model.merge_and_unload()
+    pretrained.save_pretrained(args.final_model)

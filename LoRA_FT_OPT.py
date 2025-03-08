@@ -186,8 +186,8 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--dataset",
-        default = 'combined',
-        choices=["combined", "only_en"],
+        default = 'c4',
+        choices=["c4", "wiki"],
         type = str,
         help="load which dataset",
     )
@@ -242,9 +242,7 @@ if __name__ == "__main__":
 
     print(f"load {args.dataset} dataset")
 
-    if args.dataset == "combined":
-        dataset = get_combined_train_opt(model_path = args.model)
-    else:
+    if args.dataset == "c4":
         dataset = get_c4_train(model_path=args.model)
     
 
