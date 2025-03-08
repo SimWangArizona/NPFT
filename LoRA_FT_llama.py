@@ -19,6 +19,7 @@ from src.utils import (
     load_model,
     parse_model,
     get_combined_train_llama,
+    get_c4
     
 )
 from src.outliers import (

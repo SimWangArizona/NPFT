@@ -1,4 +1,5 @@
 from transformers import AutoModelForCausalLM, LlamaForCausalLM, OPTForCausalLM
+import torch.nn as nn
 
 
 def load_model(model, model_type, cache_dir=None):
@@ -36,6 +37,18 @@ def parse_model(model):
 
     return model_type
 
+# function to find layers in the network (either for packing or for replacement)
+def find_layers(module, layers=[nn.Conv2d, nn.Linear], name=""):
+    if type(module) in layers:
+        return {name: module}
+    res = {}
+    for name1, child in module.named_children():
+        res.update(
+            find_layers(
+                child, layers=layers, name=name + "." + name1 if name != "" else name1
+            )
+        )
+    return res
 
 def get_module_names(model_type):
     if model_type == "opt":

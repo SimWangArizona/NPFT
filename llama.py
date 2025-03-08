@@ -3,15 +3,20 @@ import time
 import torch
 import torch.nn as nn
 
-from squeezellm.modelutils import *
-# from squeezellm.quant import *
-from squeezellm.model_parse import (
-    parse_model,
-    get_layers,
-    get_embedding,
-    get_norm,
-)
 
+from src.utils import (
+    get_layers,
+    get_module_names,
+    get_modules,
+    load_model,
+    parse_model,
+    find_layers,
+    get_combined_train_llama,
+    get_c4,
+    get_loaders,
+    get_mlg_loaders
+    
+)
 
 def get_model(model):
     import torch
@@ -390,8 +395,6 @@ def benchmark(model, input_ids, check=False):
 
 if __name__ == "__main__":
     import argparse
-    from squeezellm.datautils import *
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument("model", type=str, help="llama model to load")

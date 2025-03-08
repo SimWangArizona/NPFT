@@ -4,13 +4,18 @@ import torch
 import torch.nn as nn
 
 # from Visualization.visualize_weight_matrix import module_names
-from squeezellm.modelutils import *
-# from squeezellm.quant import *
-from squeezellm.model_parse import (
-    parse_model,
+from src.utils import (
     get_layers,
-    get_embedding,
-    get_norm, load_model, get_module_names,
+    get_module_names,
+    get_modules,
+    load_model,
+    parse_model,
+    find_layers,
+    get_combined_train_llama,
+    get_c4,
+    get_loaders,
+    get_mlg_loaders
+    
 )
 
 
@@ -419,8 +424,6 @@ def benchmark(model, input_ids, check=False):
 
 if __name__ == "__main__":
     import argparse
-    from squeezellm.datautils import *
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument("model", type=str, help="llama model to load")
